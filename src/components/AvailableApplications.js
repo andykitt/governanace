@@ -1,30 +1,7 @@
 import React from "react";
 import API from "../services/API";
-import { useMutation, useQueryClient } from "react-query";
 
-const AvailableApplications = ({ goToVotePage, account, passphrase }) => {
-  const queryClient = useQueryClient();
-  const mutation = useMutation(
-    () => {
-      return register();
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries("accountInfo");
-      }
-    }
-  );
-
-  const register = async () => {
-    const data = {
-      passphrase,
-      appID: 13362097,
-      assetID: 13362110,
-      amount: 1000000
-    };
-    await API.post("/register", data).then((res) => res);
-  };
-
+const AvailableApplications = ({ mutation, goToVotePage, account }) => {
   const voted =
     account &&
     Boolean(

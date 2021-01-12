@@ -2,13 +2,39 @@ import React from "react";
 import { AccountInformation, AvailableApplications } from "../components";
 import { useHistory } from "react-router-dom";
 import API from "../services/API";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 const Voter = ({ storedAccount }) => {
+  const queryClient = useQueryClient();
   let history = useHistory();
   const { isLoading, isError, data, error } = useQuery("accountInfo", () =>
     API.get(`/accounts/${storedAccount.account}`)
   );
+
+  const mutation = useMutation(
+    () => {
+      return register();
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("accountInfo");
+      }
+    }
+  );
+
+  const register = async () => {
+    try {
+      const data = {
+        passphrase: storedAccount.passphrase,
+        appID: 13362097,
+        assetID: 13362110,
+        amount: 1000000
+      };
+      await API.post("/register", data);
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -33,7 +59,7 @@ const Voter = ({ storedAccount }) => {
         <AvailableApplications
           goToVotePage={goToVotePage}
           account={account}
-          passphrase={storedAccount.passphrase}
+          mutation={mutation}
           address={storedAccount.account}
         />
       </div>

@@ -1,13 +1,14 @@
 import React from "react";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { VoteItem, Results } from "../components";
 import API from "../services/API";
 
 const Vote = ({ storedAccount }) => {
+  const queryClient = useQueryClient();
   const { isLoading, isError, data, error } = useQuery(
     "results",
-    () => API.get("/apps/13362097/state")
-    // { refetchInterval: 1000 }
+    () => API.get("/apps/13362097/state"),
+    { refetchInterval: 1000 }
   );
   const [selected, onSelect] = React.useState();
   const [voting, isVoting] = React.useState();
@@ -18,9 +19,10 @@ const Vote = ({ storedAccount }) => {
       return handleVote();
     },
     {
-      onSuccess: () => {
-        console.log("success");
+      onSuccess: (data) => {
         isVoting(false);
+        setHasVoted(true);
+        queryClient.invalidateQueries("results");
       }
     }
   );
@@ -42,11 +44,8 @@ const Vote = ({ storedAccount }) => {
         assetID: 13362110
       };
 
-      await API.post("/vote", data)
-        .then((res) => {
-          console.log("res", res);
-          setHasVoted(true);
-        })
+      return await API.post("/vote", data)
+        .then((res) => res)
         .catch((e) => {
           isVoting(false);
           console.log(e);

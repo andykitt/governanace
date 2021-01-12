@@ -1,20 +1,6 @@
 import React from "react";
-import { useMutation, useQueryClient } from "react-query";
-import API from "../services/API";
 
-const AcccountBox = ({ account, setAccount }) => {
-  const queryClient = useQueryClient();
-  const { mutateAsync } = useMutation(() => createAccount(), {
-    onSuccess: () => {
-      console.log("onSUCESSS");
-      queryClient.invalidateQueries("transactions");
-    }
-  });
-
-  const createAccount = async () => {
-    await API.get("/accounts/create").then(({ data }) => setAccount(data));
-  };
-
+const AcccountBox = ({ account, mutateAsync }) => {
   return (
     <form className="space-y-8">
       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
