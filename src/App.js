@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./tailwind.output.css";
-import { Voter, Vote, Account } from "./pages";
+import { Voter, Vote, Vote2, Account } from "./pages";
 import { NavBar } from "./components";
 import { useLocalStorage } from "./hooks/useStorage";
 
@@ -18,6 +18,9 @@ function App() {
           </Route>
           <Route path="/vote">
             <Vote storedAccount={account} />
+          </Route>
+          <Route path="/vote2">
+            <Vote2 storedAccount={account} />
           </Route>
           <Route path="/">
             <Account account={account} setAccount={setAccount} />

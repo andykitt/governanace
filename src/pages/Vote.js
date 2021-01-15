@@ -28,10 +28,10 @@ const Vote = ({ storedAccount }) => {
   );
 
   const options = [
-    { id: 1, name: "Party1", color: "red" },
-    { id: 2, name: "Party2", color: "blue" },
-    { id: 3, name: "Party3", color: "yellow" },
-    { id: 4, name: "Party4", color: "green" }
+    { id: 1, label: "Party 1", name: "Party1", color: "red" },
+    { id: 2, label: "Party 2", name: "Party2", color: "blue" },
+    { id: 3, label: "Party 3", name: "Party3", color: "yellow" },
+    { id: 4, label: "Party 4", name: "Party4", color: "green" }
   ];
 
   const handleVote = async () => {
@@ -65,7 +65,9 @@ const Vote = ({ storedAccount }) => {
 
   return (
     <div className="flex flex-col h-screen p-5">
-      <h1 className="text-3xl font-bold tracking-tight">Choose your vote</h1>
+      <h1 className="text-3xl font-bold tracking-tight my-2">
+        Choose your vote
+      </h1>
       <ul
         className="space-y-4"
         role="radiogroup"
@@ -103,7 +105,7 @@ const Vote = ({ storedAccount }) => {
         </button>
       </div>
       <h1 className="text-3xl font-bold tracking-tight">Results</h1>
-      <Results results={results} />
+      <Results results={results} options={options} />
     </div>
   );
 };

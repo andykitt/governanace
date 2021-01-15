@@ -11,9 +11,9 @@ const Voter = ({ storedAccount }) => {
     API.get(`/accounts/${storedAccount.account}`)
   );
 
-  const mutation = useMutation(
+  const first = useMutation(
     () => {
-      return register();
+      return register(13362097);
     },
     {
       onSuccess: () => {
@@ -22,11 +22,22 @@ const Voter = ({ storedAccount }) => {
     }
   );
 
-  const register = async () => {
+  const second = useMutation(
+    () => {
+      return register(13378903);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("accountInfo");
+      }
+    }
+  );
+
+  const register = async (appID) => {
     try {
       const data = {
         passphrase: storedAccount.passphrase,
-        appID: 13362097,
+        appID,
         assetID: 13362110,
         amount: 1000000
       };
@@ -46,8 +57,8 @@ const Voter = ({ storedAccount }) => {
 
   const account = data.data.accountInfo;
 
-  const goToVotePage = () => {
-    history.push("/vote");
+  const goToVotePage = (route) => {
+    history.push(route);
   };
   return (
     <div className="container mx-auto m-5">
@@ -59,7 +70,8 @@ const Voter = ({ storedAccount }) => {
         <AvailableApplications
           goToVotePage={goToVotePage}
           account={account}
-          mutation={mutation}
+          first={first}
+          second={second}
           address={storedAccount.account}
         />
       </div>
